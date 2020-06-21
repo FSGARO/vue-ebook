@@ -44,14 +44,15 @@
         this.setSettingVisible(-1) /*关闭后自动隐藏字体选项*/
         this.setFontFamilyVisible(false)/*关闭后自动隐藏字体选择界面*/
       },
+      /*加载Epub*/
       initEpub () {
         const url = 'http://192.168.1.104:8081/epub/' + this.fileName + '.epub'
         this.book = new Epub(url)
         /*把书传入currentBook*/
         this.setCurrentBook(this.book)
         this.rendition = this.book.renderTo('read', {
-          width: innerHeight,
-          height:innerHeight
+          width: window.innerWidth,
+          height: window.innerHeight
         })
         this.rendition.display()/*渲染*/
         this.rendition.themes.fontSize(24 + '')
