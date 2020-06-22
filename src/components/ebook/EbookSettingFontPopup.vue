@@ -27,6 +27,7 @@
 <script>
   import { ebookMinx } from '../../utils/mixin'
   import { FONT_FAMILY } from '../../utils/book'
+  import { setLocalStorage, getLocalStorage, removeLocalStorage, clearLocalStorage } from '../../utils/localStorage'
 
   export default {
     mixins: [ebookMinx],
@@ -37,6 +38,7 @@
     },
     name: 'EbookSettingFontPopup',
     methods: {
+      /*隐藏字体选项*/
       hide () {
         this.setFontFamilyVisible(false)
       },
@@ -52,6 +54,11 @@
         }
         this.setFontFamilyVisible(false)/*选择后自动关闭选项*/
       }
+    },
+    mounted () {
+      setLocalStorage(this.fileName, 'aaa')
+      console.log(getLocalStorage(this.fileName))
+      removeLocalStorage()
     }
   }
 </script>

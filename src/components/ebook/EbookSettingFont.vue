@@ -47,7 +47,9 @@
     methods: {
       setFontSize (fontSize) {
         this.setDefaultFontSize(fontSize)
-        this.currentBook.rendition.themes.fontSize(fontSize)
+        this.currentBook.rendition.themes.fontSize(this.defaultFontSize)
+        console.log(fontSize + '  ' + this.defaultFontSize
+        )
       },
       /*弹出字体选择界面*/
       showFontFamilyPopup () {
@@ -147,8 +149,7 @@
     .setting-font-family {
       flex: 1; //字体设置空间 1/3
       font-size: px2rem(14);
-      @include center
-      .setting-font-family-text-wrapper {
+      @include center.setting-font-family-text-wrapper {
         @include center
       }
 
