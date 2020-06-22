@@ -10,6 +10,15 @@
 <script>
   import { ebookMinx } from '../../utils/mixin'
   import Epub from 'epubjs'
+  import {
+    getFontFamily,
+    getFontSize,
+    getTheme,
+    saveFontFamily,
+    saveFontSize,
+    saveTheme
+  } from '../../utils/localStorage'
+  import { addCss, themeList } from '../../utils/book'
 
   global.ePub = Epub
   export default {
@@ -44,9 +53,44 @@
         this.setSettingVisible(-1) /*关闭后自动隐藏字体选项*/
         this.setFontFamilyVisible(false)/*关闭后自动隐藏字体选择界面*/
       },
+      /*初始化字体大小*/
+      initFontSize () {
+        let fontSize = getFontSize(this.fileName)
+        if (!fontSize) {
+          saveFontSize(this.fileName, this.defaultFontSize)
+        } else {
+          this.setDefaultFontSize(fontSize)
+          this.rendition.themes.fontSize(`${fontSize}px`)
+        }
+      },
+      /*初始化字体*/
+      initFontFamily () {
+        let font = getFontFamily(this.fileName)
+        if (!font) {
+          /*不存在*/
+          saveFontFamily(this.fileName, this.defaultFontFamily)
+        } else {
+          /*有就设置字体*/
+          this.rendition.themes.font(font)/*设置字体*/
+          this.setDefaultFontFamily(font)/*更新面板*/
+        }
+      },
+      /*设置主题*/
+      initTheme(){
+        let defaultTheme=getTheme(this.fileName)
+        if (!defaultTheme){
+          defaultTheme=this.themeList[0].name
+          saveTheme(this.fileName,defaultTheme)
+        }
+        this.setDefaultTheme(defaultTheme)
+        this.themeList.forEach(theme=>{
+          this.rendition.themes.register(theme.name,theme.style) /*注册*/
+        })
+        this.rendition.themes.select(defaultTheme)/*默认样式*/
+      },
       /*加载Epub*/
       initEpub () {
-        const url = 'http://192.168.1.104:8081/epub/' + this.fileName + '.epub'
+        const url = `${process.env.VUE_APP_RES_URL}/epub/` + this.fileName + '.epub'
         this.book = new Epub(url)
         /*把书传入currentBook*/
         this.setCurrentBook(this.book)
@@ -54,7 +98,15 @@
           width: window.innerWidth,
           height: window.innerHeight
         })
-        this.rendition.display()/*渲染*/
+        /*渲染*/
+        /*异步调用 设置字体*/
+        this.rendition.display().then(() => {
+          this.initTheme()
+          this.initFontSize()
+          this.initFontFamily()
+          this.initGlobalStyle()
+        })
+
         this.rendition.themes.fontSize(24 + '')
         /*开始触摸*/
         this.rendition.on('touchstart', event => {
@@ -104,7 +156,6 @@
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../assets/styles/global";
-
   .ebook-reader {
     width: 100%;
     height: 100%;

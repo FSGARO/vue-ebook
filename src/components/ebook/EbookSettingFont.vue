@@ -9,7 +9,7 @@
                @click="setFontSize(item.fontSize)">
             <div class="line"></div>
             <div class="point-wrapper">
-              <div class="point" v-show="defaultFontSize === item.fontSize">
+              <div class="point" v-show="defaultFontSize=== item.fontSize">
                 <div class="small-point"></div>
               </div>
             </div>
@@ -35,6 +35,7 @@
 <script>
   import { ebookMinx } from '../../utils/mixin'
   import { FONT_SIZE_LIST } from '../../utils/book'
+  import { saveFontFamily, saveFontSize } from '../../utils/localStorage'
 
   export default {
     name: 'EbookSettingFont',
@@ -47,9 +48,8 @@
     methods: {
       setFontSize (fontSize) {
         this.setDefaultFontSize(fontSize)
-        this.currentBook.rendition.themes.fontSize(this.defaultFontSize)
-        console.log(fontSize + '  ' + this.defaultFontSize
-        )
+        saveFontSize(this.fileName, fontSize)
+        this.currentBook.rendition.themes.fontSize(`${fontSize}px`)/*不能直接用fontSzie*/
       },
       /*弹出字体选择界面*/
       showFontFamilyPopup () {

@@ -19,6 +19,7 @@
     </transition>
     <ebook-setting-font></ebook-setting-font>
     <ebook-setting-font-popup></ebook-setting-font-popup>
+    <ebook-setting-theme></ebook-setting-theme>
   </div>
 </template>
 
@@ -26,12 +27,14 @@
   import EbookSettingFont from './EbookSettingFont'
   import { ebookMinx } from '../../utils/mixin'
   import EbookSettingFontPopup from './EbookSettingFontPopup'
+  import EbookSettingTheme from './EbookSettingTheme'
 
   export default {
-    components: { EbookSettingFontPopup, EbookSettingFont },
+    components: { EbookSettingTheme,  EbookSettingFontPopup, EbookSettingFont },
     comments: {
       EbookSettingFont,
-      EbookSettingFontPopup
+      EbookSettingFontPopup,
+      EbookSettingTheme
     },
     mixins: [ebookMinx], /*利用vuex的mixins精简代码*/
     name: 'EbookMenu',
