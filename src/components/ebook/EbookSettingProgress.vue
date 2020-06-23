@@ -14,6 +14,15 @@
             <span class="icon-back"></span>
           </div>
           <!--进度条-->
+          <!--  <input :disabled="!bookAvailable" :value="progress"
+                   @change="onProgressChange($event.target.value)"
+                   @input="onProgressInput($event.target.value)"
+                   class="progress"
+                   max="100"
+                   min="0"
+                   ref="progress"
+                   step="1"
+                   type="range">-->
           <input :disabled="!bookAvailable" :value="progress"
                  @change="onProgressChange($event.target.value)"
                  @input="onProgressInput($event.target.value)"
@@ -78,7 +87,7 @@
       /*进度条拖动中*/
       onProgressInput (progress) {
         this.setProgress(progress).then(() => {
-          this.updataProgressBg() /*拖动中百分比一起变化*/
+          this.updateProgressBg() /*拖动中百分比一起变化*/
           /*this.displayProgress()*/      /*内容*/
         })
       },
@@ -159,26 +168,21 @@
         box-sizing: border-box;
 
         .progress {
-          flex: 1;
           width: 100%;
           -webkit-appearance: none;
           height: px2rem(2);
-          /*background: -webkit-linear-gradient(#5d6268, #5d6268) no-repeat, #b4b5b7;
-          background-size: 0 100%;*/
           margin: 0 px2rem(10);
-
           &:focus {
             outline: none;
           }
-
           &::-webkit-slider-thumb {
             -webkit-appearance: none;
             height: px2rem(20);
             width: px2rem(20);
             border-radius: 50%;
-            background: #ceced0;
-            box-shadow: 0 px2rem(4) px2rem(6) 0 rgba(0, 0, 0, .15);
-            border: none;
+            background: white;
+            /*  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .15);*/
+            border: px2rem(1) solid #ddd;
           }
         }
 
