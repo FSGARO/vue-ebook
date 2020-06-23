@@ -59,11 +59,10 @@ export function getBookmark (fileName) {
 export function saveBookmark (fileName, bookmark) {
   setBookObject(fileName, 'bookmark', bookmark)
 }
-
+/*阅读时间*/
 export function getReadTime (fileName) {
   return getBookObject(fileName, 'time')
 }
-
 export function saveReadTime (fileName, theme) {
   setBookObject(fileName, 'time', theme)
 }

@@ -8,10 +8,18 @@ $ratio: 375/10;
   justify-content: center;
   align-items: center;
 }
+
 @mixin left {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+
+/*省略*/
+@mixin ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 @mixin right {

@@ -1,5 +1,6 @@
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { addCss, removeAllCss, themeList } from './book'
+import { saveLocation } from './localStorage'
 /*mapActions是混入methods中*/
 export const ebookMinx = {
   computed: {
@@ -26,9 +27,19 @@ export const ebookMinx = {
       'speakingIconBottom'
     ]),
     /*主题数组*/
-    themeList(){
+    themeList () {
       return themeList(this)
     },
+
+    /*  getSectionName() {
+        if (this.section) {
+          const section = this.currentBook.section(this.section)
+          if (section && section.href && this.currentBook && this.currentBook.navigation) {
+            // return this.currentBook.navigation.get(section.href).label
+            return this.navigation[this.section].label
+          }
+        }
+      }*/
   },
   methods: {
     ...mapActions([
@@ -54,7 +65,7 @@ export const ebookMinx = {
       'setSpeakingIconBottom'
     ]),
     /*初始化全局样式 动态添加css*/
-    initGlobalStyle(){
+    initGlobalStyle () {
       removeAllCss()
       switch (this.defaultTheme) {
         case 'Default':
@@ -72,6 +83,30 @@ export const ebookMinx = {
         default:
           addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_default.css`)
           break
+      }
+    },
+
+    /*刷新位置*/
+    refreshLocation () {
+      const currentLocation = this.currentBook.rendition.currentLocation()
+      /*章节开始位置*/
+      const startCfi = currentLocation.start.cfi
+      const progress = this.currentBook.locations.percentageFromCfi(startCfi)
+      this.setProgress(Math.floor(progress * 100))
+      this.setSection(currentLocation.start.index)
+      saveLocation(this.fileName, startCfi) /*保存位置*/
+    },
+    display (target, cb) {
+      if (target) {
+        this.currentBook.rendition.display(target).then(() => {
+          this.refreshLocation()
+          if (cb) cb() /*回调*/
+        })
+      } else {
+        this.currentBook.rendition.display().then(() => {
+          this.refreshLocation()
+          if (cb) cb()
+        })
       }
     }
   }

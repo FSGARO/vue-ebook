@@ -14,7 +14,6 @@
     </div>
   </transition>
 </template>
-
 <script>
   import { ebookMinx } from '../../utils/mixin'
   import { saveTheme } from '../../utils/localStorage'

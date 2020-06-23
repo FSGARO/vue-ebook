@@ -7,9 +7,9 @@ const book = {
     defaultFontFamily: 'Default', /*默认字体*/
     fontFamilyVisible: false, /*字体选择界面是否显示*/
     defaultTheme: 'Default',/*默认主题*/
-    bookAvailable: false,
-    progress: 0,
-    section: 0,
+    bookAvailable: false,/*进度条状态 false为禁用*/
+    progress: 0,/*进度条位置*/
+    section: 52,/*当前章节位置*/
     isPaginating: true,
     currentBook: null, //解析的书
     navigation: null,

@@ -35,7 +35,7 @@
 <script>
   import { ebookMinx } from '../../utils/mixin'
   import { FONT_SIZE_LIST } from '../../utils/book'
-  import { saveFontFamily, saveFontSize } from '../../utils/localStorage'
+  import { saveFontSize } from '../../utils/localStorage'
 
   export default {
     name: 'EbookSettingFont',
@@ -49,7 +49,7 @@
       setFontSize (fontSize) {
         this.setDefaultFontSize(fontSize)
         saveFontSize(this.fileName, fontSize)
-        this.currentBook.rendition.themes.fontSize(`${fontSize}px`)/*不能直接用fontSzie*/
+        this.currentBook.rendition.themes.fontSize(`${fontSize}px`) /*不能直接用fontSize*/
       },
       /*弹出字体选择界面*/
       showFontFamilyPopup () {
