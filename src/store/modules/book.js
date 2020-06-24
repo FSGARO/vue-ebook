@@ -12,9 +12,9 @@ const book = {
     section: 0,/*当前章节位置*/
     isPaginating: true,
     currentBook: null, //解析的书
-    navigation: null,
-    cover: null,
-    metadata: null,
+    navigation: null,/*目录*/
+    cover: null,/*电子书的图片*/
+    metadata: null,/*书籍信息*/
     paginate: '',
     pagelist: null,
     offsetY: 0,

@@ -14,15 +14,6 @@
             <span class="icon-back"></span>
           </div>
           <!--进度条-->
-          <!--  <input :disabled="!bookAvailable" :value="progress"
-                   @change="onProgressChange($event.target.value)"
-                   @input="onProgressInput($event.target.value)"
-                   class="progress"
-                   max="100"
-                   min="0"
-                   ref="progress"
-                   step="1"
-                   type="range">-->
           <input :disabled="!bookAvailable" :value="progress"
                  @change="onProgressChange($event.target.value)"
                  @input="onProgressInput($event.target.value)"
@@ -47,7 +38,6 @@
 </template>
 <script>
   import { ebookMinx } from '../../utils/mixin'
-  import { getReadTime } from '../../utils/localStorage'
 
   export default {
     mixins: [ebookMinx],
@@ -55,28 +45,17 @@
     computed: {
       /*章节名*/
       getSectionName () {
-        if (this.section) {
-          const sectionInfo = this.currentBook.section(this.section)
-          if (sectionInfo && sectionInfo.href) {
-            return this.currentBook.navigation.get(sectionInfo.href).label  /*获取当前目录*/
-          }
-        }
+        /*获取当前目录*/
+        /* if (this.section) {
+           const sectionInfo = this.currentBook.section(this.section)
+           if (sectionInfo && sectionInfo.href&&this.currentBook&&this.currentBook.navigation) {
+             return this.currentBook.navigation.get(sectionInfo.href).label
+           }
+         }*/
+        return this.section ? this.navigation[this.section - 1].label : ''
       }
     },
     methods: {
-      /*获取阅读时间与文本*/
-      getReadTimeText () {
-        return this.$t('book.haveRead').replace('$1', this.getReadTimeByMinute())
-      },
-      /*处理阅读时间*/
-      getReadTimeByMinute () {
-        const readTime = getReadTime(this.fileName)
-        if (!readTime) {
-          return 0
-        } else {
-          return Math.ceil(readTime / 60) /*ceil向上取整*/
-        }
-      },
       /*进度条拖动松手后*/
       onProgressChange (progress) {
         this.setProgress(progress).then(() => {

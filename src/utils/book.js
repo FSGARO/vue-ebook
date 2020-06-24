@@ -1,5 +1,7 @@
 /*字号大小*/
 
+import { getReadTime } from './localStorage'
+
 export const FONT_SIZE_LIST = [
   { fontSize: 12 },
   { fontSize: 14 },
@@ -81,10 +83,26 @@ const links=document.getElementsByTagName('link')
     }
   }
 }
+
 export function removeAllCss () {
-removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_Default.css`)
-removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_gold.css`)
-removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_eye.css`)
-removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_night.css`)
+  removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_Default.css`)
+  removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_gold.css`)
+  removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_eye.css`)
+  removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_night.css`)
+}
+
+/*处理阅读时间*/
+export function getReadTimeByMinute (fileName) {
+  const readTime = getReadTime(fileName)
+  if (!readTime) {
+    return 0
+  } else {
+    return Math.ceil(readTime / 60) /*ceil向上取整*/
+  }
+}
+
+/*扩展运算符处理章节 取出每一个合并*/
+export function flatten (array) {
+  return [].concat(...array.map(item => [].concat(item, ...flatten(item.subitems))))
 }
 

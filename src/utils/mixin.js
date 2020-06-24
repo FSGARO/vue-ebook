@@ -1,5 +1,5 @@
 import { mapActions, mapGetters } from 'vuex'
-import { addCss, removeAllCss, themeList } from './book'
+import { addCss, getReadTimeByMinute, removeAllCss, themeList } from './book'
 import { saveLocation } from './localStorage'
 /*mapActions是混入methods中*/
 export const ebookMinx = {
@@ -85,16 +85,17 @@ export const ebookMinx = {
           break
       }
     },
-
     /*刷新位置*/
     refreshLocation () {
       const currentLocation = this.currentBook.rendition.currentLocation()
       /*章节开始位置*/
-      const startCfi = currentLocation.start.cfi
-      const progress = this.currentBook.locations.percentageFromCfi(startCfi)
-      this.setProgress(Math.floor(progress * 100))
-      this.setSection(currentLocation.start.index)
-      saveLocation(this.fileName, startCfi) /*保存位置*/
+      if (currentLocation && currentLocation.start) {
+        const startCfi = currentLocation.start.cfi
+        const progress = this.currentBook.locations.percentageFromCfi(startCfi)
+        this.setProgress(Math.floor(progress * 100))
+        this.setSection(currentLocation.start.index)
+        saveLocation(this.fileName, startCfi) /*保存位置*/
+      }
     },
     display (target, cb) {
       if (target) {
@@ -108,6 +109,16 @@ export const ebookMinx = {
           if (cb) cb()
         })
       }
-    }
+    },
+    /*隐藏*/
+    hideTitleAndMenu () {
+      this.setMenuVisible(false)//换页时自动关闭
+      this.setSettingVisible(-1) /*关闭后自动隐藏字体选项*/
+      this.setFontFamilyVisible(false)/*关闭后自动隐藏字体选择界面*/
+    },
+    /*获取阅读时间与文本*/
+    getReadTimeText () {
+      return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
+    },
   }
 }

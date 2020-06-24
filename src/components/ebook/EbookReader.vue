@@ -1,15 +1,14 @@
 <!--阅读-->
 <template>
-  <!-- <div class="ebook-reader">
-     <div id="read"></div>
-   </div>-->
   <div class="read-wrapper">
     <div id="read"></div>
   </div>
 </template>
+
 <script>
   import { ebookMinx } from '../../utils/mixin'
   import Epub from 'epubjs'
+  import { flatten } from '../../utils/book'
   import {
     getFontFamily,
     getFontSize,
@@ -52,12 +51,6 @@
         this.setMenuVisible(!this.menuVisible)
         this.setFontFamilyVisible(false)
       },
-      /*隐藏*/
-      hideTitleAndMenu () {
-        this.setMenuVisible(false)//换页时自动关闭
-        this.setSettingVisible(-1) /*关闭后自动隐藏字体选项*/
-        this.setFontFamilyVisible(false)/*关闭后自动隐藏字体选择界面*/
-      },
       /*初始化字体大小*/
       initFontSize () {
         let fontSize = getFontSize(this.fileName)
@@ -68,36 +61,12 @@
           this.rendition.themes.fontSize(`${fontSize}px`)
         }
       },
-      /*初始化字体*/
-      initFontFamily () {
-        let font = getFontFamily(this.fileName)
-        if (!font) {
-          /*不存在*/
-          saveFontFamily(this.fileName, this.defaultFontFamily)
-        } else {
-          /*有就设置字体*/
-          this.rendition.themes.font(font)/*设置字体*/
-          this.setDefaultFontFamily(font)/*更新面板*/
-        }
-      },
-      /*设置主题*/
-      initTheme () {
-        let defaultTheme = getTheme(this.fileName)
-        if (!defaultTheme) {
-          defaultTheme = this.themeList[0].name
-          saveTheme(this.fileName, defaultTheme)
-        }
-        this.setDefaultTheme(defaultTheme)
-        this.themeList.forEach(theme => {
-          this.rendition.themes.register(theme.name, theme.style) /*注册*/
-        })
-        this.rendition.themes.select(defaultTheme)/*默认样式*/
-      },
       /*渲染的初始化过程*/
       initRendition () {
         this.rendition = this.book.renderTo('read', {
           width: window.innerWidth,
-          height: window.innerHeight
+          height: window.innerHeight,
+
         })
         const location = getLocation(this.fileName)
         /*location载入 初始化*/
@@ -147,6 +116,40 @@
           event.stopPropagation()
         })
       },
+      /*获取书的图片,基本信息*/
+      parseBook () {
+        this.book.loaded.cover.then(cover => {
+          /*生成链接后保存*/
+          this.book.archive.createUrl(cover).then(url => {
+            this.setCover(url)
+          })
+        })
+        /*图书信息*/
+        this.book.loaded.metadata.then(metadata => {
+          this.setMetadata(metadata)
+        })
+        /*图书章节*/
+        this.book.loaded.navigation.then(nav => {
+          const navItem = flatten(nav.toc) /*获取章节数组*/
+
+          /*目录处理*/
+          function find (item, level = 0) {
+            return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
+            /*   if (!item.parent){
+               return level
+             }else{
+               return find(navItem.filter(parebtItem=>parebtItem.id===item.parent[0],++level))
+             }*/
+          }
+
+          console.log(navItem)
+          navItem.forEach(item => {
+            item.level = find(item)
+          })
+          /*目录*/
+          this.setNavigation(navItem)
+        })
+      },
       /*加载Epub*/
       initEpub () {
         const url = `${process.env.VUE_APP_RES_URL}/epub/` + this.fileName + '.epub'
@@ -155,6 +158,7 @@
         this.setCurrentBook(this.book)
         /*重构代码 渲染*/
         this.initRendition()
+        this.parseBook()
         /*初始化手势*/
         this.initGesture()
         /*解析完成后 分页*/
@@ -167,8 +171,33 @@
           })
         })
       },
-
+      /*初始化字体*/
+      initFontFamily () {
+        let font = getFontFamily(this.fileName)
+        if (!font) {
+          /*不存在*/
+          saveFontFamily(this.fileName, this.defaultFontFamily)
+        } else {
+          /*有就设置字体*/
+          this.rendition.themes.font(font)/*设置字体*/
+          this.setDefaultFontFamily(font)/*更新面板*/
+        }
+      },
+      /*设置主题*/
+      initTheme () {
+        let defaultTheme = getTheme(this.fileName)
+        if (!defaultTheme) {
+          defaultTheme = this.themeList[0].name
+          saveTheme(this.fileName, defaultTheme)
+        }
+        this.setDefaultTheme(defaultTheme)
+        this.themeList.forEach(theme => {
+          this.rendition.themes.register(theme.name, theme.style) /*注册*/
+        })
+        this.rendition.themes.select(defaultTheme)/*默认样式*/
+      },
     },
+
     mounted () {
       this.setFileName(this.$route.params.fileName.split('|').join('/')).then(() =>
         this.initEpub()
