@@ -33,13 +33,13 @@
 </template>
 
 <script>
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
   import { FONT_SIZE_LIST } from '../../utils/book'
   import { saveFontSize } from '../../utils/localStorage'
 
   export default {
     name: 'EbookSettingFont',
-    mixins: [ebookMinx],
+    mixins: [ebookMixin],
     data () {
       return {
         fontSizeList: FONT_SIZE_LIST

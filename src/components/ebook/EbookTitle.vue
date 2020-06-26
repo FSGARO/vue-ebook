@@ -26,10 +26,10 @@
 </template>
 
 <script>
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
 
   export default {
-    mixins: [ebookMinx], /*利用vuex的mixins精简代码*/
+    mixins: [ebookMixin], /*利用vuex的mixins精简代码*/
     name: 'EbookTitle',
     methods: {
       back: function () {

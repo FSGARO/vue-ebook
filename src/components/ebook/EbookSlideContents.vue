@@ -72,12 +72,12 @@
 </template>
 
 <script>
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
   import Scroll from '../common/Scroll'
   import { px2rem } from '../../utils/utils'
 
   export default {
-    mixins: [ebookMinx],
+    mixins: [ebookMixin],
     name: 'EbookSlideContents',
     data () {
       return {

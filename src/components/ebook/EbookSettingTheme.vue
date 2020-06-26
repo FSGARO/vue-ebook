@@ -15,11 +15,11 @@
   </transition>
 </template>
 <script>
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
   import { saveTheme } from '../../utils/localStorage'
 
   export default {
-    mixins: [ebookMinx],
+    mixins: [ebookMixin],
     name: 'EbookSettingTheme',
     methods: {
       setTheme (index) {

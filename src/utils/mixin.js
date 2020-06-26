@@ -1,8 +1,8 @@
 import { mapActions, mapGetters } from 'vuex'
 import { addCss, getReadTimeByMinute, removeAllCss, themeList } from './book'
-import { saveLocation } from './localStorage'
+import { getBookmark, saveLocation } from './localStorage'
 /*mapActions是混入methods中*/
-export const ebookMinx = {
+export const ebookMixin = {
   computed: {
     ...mapGetters([
       'menuVisible',
@@ -30,16 +30,17 @@ export const ebookMinx = {
     themeList () {
       return themeList(this)
     },
-
-    /*  getSectionName() {
-        if (this.section) {
-          const section = this.currentBook.section(this.section)
-          if (section && section.href && this.currentBook && this.currentBook.navigation) {
-            // return this.currentBook.navigation.get(section.href).label
-            return this.navigation[this.section].label
-          }
-        }
-      }*/
+    /*章节名*/
+    getSectionName () {
+      /*获取当前目录*/
+      /* if (this.section) {
+         const sectionInfo = this.currentBook.section(this.section)
+         if (sectionInfo && sectionInfo.href&&this.currentBook&&this.currentBook.navigation) {
+           return this.currentBook.navigation.get(sectionInfo.href).label
+         }
+       }*/
+      return this.section ? this.navigation[this.section].label : ''
+    }
   },
   methods: {
     ...mapActions([
@@ -95,6 +96,16 @@ export const ebookMinx = {
         this.setProgress(Math.floor(progress * 100))
         this.setSection(currentLocation.start.index)
         saveLocation(this.fileName, startCfi) /*保存位置*/
+        const bookmask = getBookmark(this.fileName)
+        if (bookmask) {
+          if (bookmask.some(item => item.cfi === startCfi)) {
+            this.setIsBookmark(true)
+          } else {
+            this.setIsBookmark(false)
+          }
+        } else {
+          this.setIsBookmark(false)
+        }
       }
     },
     display (target, cb) {

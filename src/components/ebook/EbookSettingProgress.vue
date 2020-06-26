@@ -37,24 +37,12 @@
   </transition>
 </template>
 <script>
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
 
   export default {
-    mixins: [ebookMinx],
+    mixins: [ebookMixin],
     name: 'EbookSettingProgress',
-    computed: {
-      /*章节名*/
-      getSectionName () {
-        /*获取当前目录*/
-        /* if (this.section) {
-           const sectionInfo = this.currentBook.section(this.section)
-           if (sectionInfo && sectionInfo.href&&this.currentBook&&this.currentBook.navigation) {
-             return this.currentBook.navigation.get(sectionInfo.href).label
-           }
-         }*/
-        return this.section ? this.navigation[this.section].label : ''
-      }
-    },
+    computed: {},
     methods: {
       /*进度条拖动松手后*/
       onProgressChange (progress) {

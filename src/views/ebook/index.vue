@@ -1,8 +1,11 @@
 <template>
   <div class="ebook" ref="ebook">
+    <!-- <ebook-header></ebook-header>-->
     <ebook-title></ebook-title>
     <ebook-reader></ebook-reader>
     <ebook-menu></ebook-menu>
+    <ebook-bookmark></ebook-bookmark>
+    <!-- <ebook-footer></ebook-footer>-->
   </div>
 </template>
 
@@ -11,22 +14,30 @@
   import EbookTitle from '../../components/ebook/EbookTitle'
   import EbookMenu from '../../components/ebook/EbookMenu'
   import { getReadTime, saveReadTime } from '../../utils/localStorage'
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
+  import EbookBookmark from '../../components/ebook/EbookBookmark'
+  import EbookHeader from '../../components/ebook/EbookHeader'
+  import EbookFooter from '../../components/ebook/EbookFooter'
 
   export default {
-    mixins: [ebookMinx],
+    mixins: [ebookMixin],
     components: {
+      EbookFooter,
+      EbookHeader,
       EbookReader,
       EbookTitle,
-      EbookMenu
+      EbookMenu,
+      EbookBookmark
     },
     /*监听*/
     watch: {
       offsetY (v) {
-        if (v > 0) {
-          this.move(v)
-        } else if (v === 0) {
-          this.restore()
+        if (!this.menuVisible && this.bookAvailable) {
+          if (v > 0) {
+            this.move(v)
+          } else if (v === 0) {
+            this.restore()
+          }
         }
       }
     },
@@ -75,8 +86,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
     width: 100%;
     height: 100%;
   }

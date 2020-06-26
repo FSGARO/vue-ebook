@@ -27,7 +27,7 @@
 
 <script>
   import EbookSettingFont from './EbookSettingFont'
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
   import EbookSettingFontPopup from './EbookSettingFontPopup'
   import EbookSettingTheme from './EbookSettingTheme'
   import EbookSettingProgress from './EbookSettingProgress'
@@ -47,7 +47,7 @@
       EbookSettingTheme,
       EbookSettingProgress
     },
-    mixins: [ebookMinx], /*利用vuex的mixins精简代码*/
+    mixins: [ebookMixin], /*利用vuex的mixins精简代码*/
     name: 'EbookMenu',
     methods: {
       showSetting (key) {

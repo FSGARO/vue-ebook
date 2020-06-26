@@ -1,18 +1,16 @@
 <!--阅读-->
 <template>
   <div class="ebook-reader">
-    <div @click="onMaskClick"
-         @touchend="moveEnd"
-         @touchmove="move"
-         class="ebook-reader-mask"></div>
-    <div class="read-wrapper">
-      <div id="read"></div>
-    </div>
+    <div id="read"></div>
+    <!--    <div class="ebook-reader-mask"
+             @click="onMaskClick"
+             @touchmove="move"
+             @mouseup.left="onMouseEnd"></div>-->
   </div>
 </template>
 
 <script>
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
   import Epub from 'epubjs'
   import { flatten } from '../../utils/book'
   import {
@@ -27,7 +25,7 @@
 
   global.ePub = Epub
   export default {
-    mixins: [ebookMinx], /*利用vuex的mixins精简代码,实现组件复用*/
+    mixins: [ebookMixin], /*利用vuex的mixins精简代码,实现组件复用*/
     methods: {
       /*上一页*/
       prevPage () {
@@ -72,7 +70,8 @@
         this.rendition = this.book.renderTo('read', {
           width: window.innerWidth,
           height: window.innerHeight,
-
+          /*method:'default'*/
+          flow: 'scrolled'
         })
         const location = getLocation(this.fileName)
         /*location载入 初始化*/
@@ -137,6 +136,7 @@
         /*图书章节*/
         this.book.loaded.navigation.then(nav => {
           const navItem = flatten(nav.toc) /*获取章节数组*/
+
           /*目录处理*/
           function find (item, level = 0) {
             return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
@@ -146,6 +146,7 @@
                return find(navItem.filter(parebtItem=>parebtItem.id===item.parent[0],++level))
              }*/
           }
+
           navItem.forEach(item => {
             item.level = find(item)
           })
@@ -200,16 +201,66 @@
         this.rendition.themes.select(defaultTheme)/*默认样式*/
       },
       /*蒙版点击*/
-      onMaskClick (e) {
+      /*onMaskClick (e) {
         const offsetX = e.offsetX
-        window = window.innerWidth
-        if (offsetX > 0 && offsetX < window * 0.3) {
+        const width = window.innerWidth
+        console.log('e')
+        if (offsetX > 0 && offsetX < width * 0.3) {
           this.prevPage()
-        } else if (offsetX > 0 && offsetX > window * 0.7) {
+        } else if (offsetX > 0 && offsetX > width * 0.7) {
           this.nextPage()
         } else {
           this.toggleTitleAndMenu()
         }
+      },*/
+      onMaskClick (e) {
+        if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
+          return
+        }
+        const offsetX = e.offsetX
+        const width = window.innerWidth
+        if (offsetX > 0 && offsetX < width * 0.3) {
+          this.prevPage()
+        } else if (offsetX > 0 && offsetX > width * 0.7) {
+          this.nextPage()
+        } else {
+          this.toggleTitleAndMenu()
+        }
+      },
+      onMouseEnter (e) {
+        this.mouseMove = 1
+        this.mouseStartTime = e.timeStamp
+        e.preventDefault()
+        e.stopPropagation()
+      },
+      onMouseMove (e) {
+        if (this.mouseMove === 1) {
+          this.mouseMove = 2
+        } else if (this.mouseMove === 2) {
+          let offsetY = 0
+          if (this.firstOffsetY) {
+            offsetY = e.clientY - this.firstOffsetY
+            this.$store.commit('SET_OFFSETY', offsetY)
+          } else {
+            this.firstOffsetY = e.clientY
+          }
+        }
+        e.preventDefault()
+        e.stopPropagation()
+      },
+      onMouseEnd (e) {
+        if (this.mouseMove === 2) {
+          this.$store.dispatch('setOffsetY', 0)
+          this.firstOffsetY = 0
+          this.mouseMove = 3
+        }
+        this.mouseEndTime = e.timeStamp
+        const time = this.mouseEndTime - this.mouseStartTime
+        if (time < 200) {
+          this.mouseMove = 1
+        }
+        e.preventDefault()
+        e.stopPropagation()
       },
       move (e) {
         let offsetY = 0
@@ -244,14 +295,14 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-
     .ebook-reader-mask {
       position: absolute;
-      z-index: 150;
       top: 0;
       left: 0;
+      z-index: 150;
+      background: transparent;
       width: 100%;
-      height: 100%;
+      height: 50%;
     }
   }
 </style>

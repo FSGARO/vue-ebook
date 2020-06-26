@@ -35,12 +35,13 @@
 </template>
 
 <script>
-  import { ebookMinx } from '../../utils/mixin'
+  import { ebookMixin } from '../../utils/mixin'
   import EbookSlideContents from './EbookSlideContents'
   import EbookLoading from './EbookLoading'
+  import EbookSlideBookmark from './EbookSlideBookmark'
 
   export default {
-    mixins: [ebookMinx],
+    mixins: [ebookMixin],
     name: 'EbookSlide',
     components: {
       EbookLoading
@@ -49,7 +50,7 @@
       return {
         currentTab: 1,
         content: EbookSlideContents,
-        bookmark: null
+        bookmark: EbookSlideBookmark
       }
     },
     methods: {

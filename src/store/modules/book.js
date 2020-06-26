@@ -18,7 +18,7 @@ const book = {
     paginate: '',
     pagelist: null,
     offsetY: 0,/*书签中拉下的距离*/
-    isBookmark: null
+    isBookmark: null/*是否为书签页*/
     /*  speakingIconBottom: realPx(58)*/
   },
 
