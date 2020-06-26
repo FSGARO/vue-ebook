@@ -17,7 +17,7 @@ const book = {
     metadata: null,/*书籍信息*/
     paginate: '',
     pagelist: null,
-    offsetY: 0,
+    offsetY: 0,/*书签中拉下的距离*/
     isBookmark: null
     /*  speakingIconBottom: realPx(58)*/
   },

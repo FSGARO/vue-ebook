@@ -24,6 +24,7 @@
             </div>
           </div>
           <div class="content-empty" v-else>
+            <EbookLoading></EbookLoading>
           </div>
         </div>
       </transition>
@@ -36,10 +37,14 @@
 <script>
   import { ebookMinx } from '../../utils/mixin'
   import EbookSlideContents from './EbookSlideContents'
+  import EbookLoading from './EbookLoading'
 
   export default {
     mixins: [ebookMinx],
     name: 'EbookSlide',
+    components: {
+      EbookLoading
+    },
     data () {
       return {
         currentTab: 1,
@@ -96,7 +101,7 @@
         }
       }
 
-      .empty {
+      .content-empty {
         width: 100%;
         height: 100%;
         @include center;

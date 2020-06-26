@@ -1,7 +1,13 @@
 <!--阅读-->
 <template>
-  <div class="read-wrapper">
-    <div id="read"></div>
+  <div class="ebook-reader">
+    <div @click="onMaskClick"
+         @touchend="moveEnd"
+         @touchmove="move"
+         class="ebook-reader-mask"></div>
+    <div class="read-wrapper">
+      <div id="read"></div>
+    </div>
   </div>
 </template>
 
@@ -131,7 +137,6 @@
         /*图书章节*/
         this.book.loaded.navigation.then(nav => {
           const navItem = flatten(nav.toc) /*获取章节数组*/
-
           /*目录处理*/
           function find (item, level = 0) {
             return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
@@ -141,8 +146,6 @@
                return find(navItem.filter(parebtItem=>parebtItem.id===item.parent[0],++level))
              }*/
           }
-
-          console.log(navItem)
           navItem.forEach(item => {
             item.level = find(item)
           })
@@ -196,6 +199,34 @@
         })
         this.rendition.themes.select(defaultTheme)/*默认样式*/
       },
+      /*蒙版点击*/
+      onMaskClick (e) {
+        const offsetX = e.offsetX
+        window = window.innerWidth
+        if (offsetX > 0 && offsetX < window * 0.3) {
+          this.prevPage()
+        } else if (offsetX > 0 && offsetX > window * 0.7) {
+          this.nextPage()
+        } else {
+          this.toggleTitleAndMenu()
+        }
+      },
+      move (e) {
+        let offsetY = 0
+        if (this.firstOffsetY) {
+          offsetY = e.changedTouches[0].clientY - this.firstOffsetY
+          this.setOffsetY(offsetY)
+        } else {
+          /*changedTouches 触摸点*/
+          this.firstOffsetY = e.changedTouches[0].clientY
+        }
+        e.preventDefault()
+        e.stopPropagation()
+      },
+      moveEnd (e) {
+        this.setOffsetY(0)
+        this.firstOffsetY = null
+      }
     },
 
     mounted () {
@@ -213,5 +244,14 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+
+    .ebook-reader-mask {
+      position: absolute;
+      z-index: 150;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   }
 </style>

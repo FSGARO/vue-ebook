@@ -10,6 +10,7 @@
         <input :placeholder="$t('book.searchHint')"
                @click="showSearchPage"
                @keyup.enter.exact="search()"
+               v-model="searchText"
                class="slide-contents-search-input"
                type="text"> <!--点击时显示取消-->
       </div>
@@ -51,22 +52,22 @@
             v-show="!searchVisible">
       <div :key="index" class="slide-contents-item" v-for="(item, index) in navigation">
         <!--目录缩进-->
-        <span :class="{'selected': section-1=== index}" :style="contentItemStyle(item)"
+        <span :class="{'selected': section=== index}" :style="contentItemStyle(item)"
               @click="displayNavigation(item.href)"
               class="slide-contents-item-label">{{item.label}}</span>
         <span class="slide-contents-item-page">{{item.page}}</span>
       </div>
     </scroll>
-    <!-- <scroll class="slide-search-list"
-             :top="66"
-             :bottom="48"
-             v-show="searchVisible">
-       <div class="slide-search-item"
-            v-for="(item, index) in searchList"
-            :key="index"
-            v-html="item.excerpt"
-            @click="displayNavigation(item.cfi, true)"></div>
-     </scroll>-->
+    <scroll :bottom="48"
+            :top="66"
+            class="slide-search-list"
+            v-show="searchVisible">
+      <div :key="index"
+           @click="displayNavigation(item.cfi, true)"
+           class="slide-search-item"
+           v-for="(item, index) in searchList"
+           v-html="item.excerpt"></div>
+    </scroll>
   </div>
 </template>
 
@@ -80,13 +81,27 @@
     name: 'EbookSlideContents',
     data () {
       return {
-        searchVisible: false
+        searchVisible: false,
+        searchList: null,/*结果*/
+        searchText: null /*搜索文本*/
       }
     },
     methods: {
+      /*搜索 epubjs*/
+      doSearch (q) {
+        return Promise.all(
+          this.currentBook.spine.spineItems.map(
+            section => section.load(this.currentBook.load.bind(this.currentBook))
+              .then(section.find.bind(section, q))
+              .finally(section.unload.bind(section)))
+        ).then(results => Promise.resolve([].concat.apply([], results)))
+      },
+
       /*隐藏取消按钮*/
       hideSearchPage () {
         this.searchVisible = false
+        this.searchText = ''
+        this.searchList = ''
       },
       showSearchPage () {
         this.searchVisible = true
@@ -98,9 +113,25 @@
           marginLeft: `${px2rem(item.level * 15)}rem`
         }
       },
-      displayNavigation (target) {
+      /*搜索*/
+      search () {
+        if (this.searchText && this.searchText.length > 0) {
+          this.doSearch(this.searchText).then(list => {
+            this.searchList = list
+            this.searchList.map(item => {
+              item.excerpt = item.excerpt.replace(this.searchText,
+                `<span class="content-search-text">${this.searchText}</span>`)
+            })
+          })
+        }
+      },
+      /*跳转*/
+      displayNavigation (target, highlight = false) {
         this.display(target, () => {
           this.hideTitleAndMenu()
+          if (highlight) {
+            this.currentBook.rendition.annotations.highlight(target)
+          }
         })
       }
     },

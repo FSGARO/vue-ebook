@@ -52,7 +52,7 @@
              return this.currentBook.navigation.get(sectionInfo.href).label
            }
          }*/
-        return this.section ? this.navigation[this.section - 1].label : ''
+        return this.section ? this.navigation[this.section].label : ''
       }
     },
     methods: {
