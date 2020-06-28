@@ -1,3 +1,7 @@
+/*方便管理动画*/
+$animationTime: .2s;
+$animationType: linear;
+
 $ratio: 375/10;
 @function px2rem($px) {
   @return ($px / $ratio) + rem;
@@ -56,11 +60,63 @@ $ratio: 375/10;
   word-break: keep-all;
 }
 
+/*垂直居中 居左*/
 @mixin columnLeft {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+}
+
+/*图标*/
+.icon {
+  color: #666;
+  font-size: px2rem(16);
+}
+
+/*文本*/
+.title {
+  color: #666;
+  font-size: px2rem(16);
+  font-weight: bold;
+}
+
+@mixin absCenter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+@mixin columnTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin columnCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin leftBottom {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
 }
 
 

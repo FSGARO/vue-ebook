@@ -15,8 +15,8 @@ const book = {
     navigation: null,/*目录*/
     cover: null,/*电子书的图片*/
     metadata: null,/*书籍信息*/
-    paginate: '',
-    pagelist: null,
+    paginate: '',/*分页信息*/
+    pagelist: null,/*分页数组*/
     offsetY: 0,/*书签中拉下的距离*/
     isBookmark: null/*是否为书签页*/
     /*  speakingIconBottom: realPx(58)*/

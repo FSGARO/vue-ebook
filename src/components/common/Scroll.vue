@@ -55,9 +55,7 @@
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
-    /*解决移动端卡顿问题*/
-    -webkit-overflow-scrolling: touch;
-
+    -webkit-overflow-scrolling: touch; /*解决移动端卡顿问题*/
     &::-webkit-scrollbar {
       display: none;
     }

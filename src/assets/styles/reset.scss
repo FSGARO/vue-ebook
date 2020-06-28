@@ -1,5 +1,4 @@
 /* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
    License: none (public domain)
 */
 
@@ -65,4 +64,5 @@ body {
 }
 html, body {
   font-family: 'PingFangSC-Light', 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', 'Arial', 'sans-serif';
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /*移动端高亮显示颜色*/
 }

@@ -25,13 +25,6 @@
   const WHITE = '#ffb400'/*-------------------------------------------------------------*/
   export default {
     mixins: [ebookMixin],
-    data () {
-      return {
-        text: '',
-        color: BLUE,
-        isFixed: false
-      }
-    },
     components: {
       Bookmark
     },
@@ -77,6 +70,13 @@
           this.color = WHITE
           /* this.isFixed=false*/
         }
+      }
+    },
+    data () {
+      return {
+        text: '',
+        color: BLUE,
+        isFixed: false
       }
     },
     methods: {
@@ -168,7 +168,7 @@
           saveBookmark(this.fileName, this.bookmark.filter(item => item.cfi !== cfi))
           this.setIsBookmark(false)
         }
-      },
+      }
     }
   }
 </script>

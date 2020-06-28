@@ -66,7 +66,7 @@
     position: absolute;
     bottom: px2rem(48);
     left: 0;
-    z-index: 101;
+    z-index: 200;
     width: 100%;
     display: flex;
     flex-direction: column;

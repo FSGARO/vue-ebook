@@ -106,6 +106,19 @@ export const ebookMixin = {
         } else {
           this.setIsBookmark(false)
         }
+        /*分页信息*/
+
+        /*        if (this.pagelist) {
+                  const totalPage = this.pagelist.length
+                  const currentPage = currentLocation.start.location
+                  if (currentPage && currentPage > 0) {
+                    this.setPaginate(currentPage + ' / ' + totalPage)
+                  } else {
+                    this.setPaginate('')
+                  }
+                } else {
+                  this.setPaginate('')
+                }*/
       }
     },
     display (target, cb) {
@@ -131,5 +144,22 @@ export const ebookMixin = {
     getReadTimeText () {
       return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
     },
+  }
+}
+
+export const storeHomeMixin = {
+  computed: {
+    ...mapGetters([
+      'offsetY',
+      'hotSearchOffsetY',
+      'flapCardVisible'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'setOffsetY',
+      'setHotSearchOffsetY',
+      'setFlapCardVisible'
+    ])
   }
 }

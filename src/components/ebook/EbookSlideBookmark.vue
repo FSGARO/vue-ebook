@@ -50,7 +50,6 @@
 
   .ebook-slide-bookmark {
     width: 100%;
-
     .slide-bookmark-title {
       width: 100%;
       height: px2rem(48);
@@ -60,20 +59,16 @@
       box-sizing: border-box;
       @include left;
     }
-
     .slide-bookmark-list {
       padding: 0 px2rem(15);
       box-sizing: border-box;
-
       .slide-bookmark-item {
         display: flex;
         padding: px2rem(15) 0;
         box-sizing: border-box;
-
         .slide-bookmark-item-icon {
           flex: 0 0 px2rem(29);
           @include left;
-
           .icon-bookmark {
             width: px2rem(20);
             height: px2rem(20);
@@ -83,7 +78,6 @@
             @include center;
           }
         }
-
         .slide-bookmark-item-text {
           font-size: px2rem(14);
           line-height: px2rem(15);

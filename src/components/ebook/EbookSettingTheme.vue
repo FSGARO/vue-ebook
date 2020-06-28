@@ -41,9 +41,10 @@
     position: absolute;
     bottom: px2rem(48);
     left: 0;
-    z-index: 190;
+    z-index: 160;
     width: 100%;
     height: px2rem(90);
+    background: white;
     box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
 
     .setting-theme {
@@ -56,23 +57,23 @@
         flex-direction: column;
         padding: px2rem(5);
         box-sizing: border-box;
-
         .preview {
           flex: 1;
           border: px2rem(1) solid #ccc;
           box-sizing: border-box;
-          border: none;
-
           &.selected {
             box-shadow: 0 px2rem(4) px2rem(6) 0 rgba(0, 0, 0, .1);
-            border: px2rem(2) solid #5e6369;
           }
         }
-
         .text {
           flex: 0 0 px2rem(20);
           font-size: px2rem(14);
+          color: #ccc;
           @include center;
+
+          &.selected {
+            color: #333;
+          }
         }
       }
     }

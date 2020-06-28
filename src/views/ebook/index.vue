@@ -1,11 +1,11 @@
 <template>
   <div class="ebook" ref="ebook">
-    <!-- <ebook-header></ebook-header>-->
+     <ebook-header></ebook-header>
     <ebook-title></ebook-title>
     <ebook-reader></ebook-reader>
     <ebook-menu></ebook-menu>
     <ebook-bookmark></ebook-bookmark>
-    <!-- <ebook-footer></ebook-footer>-->
+    <ebook-footer></ebook-footer>
   </div>
 </template>
 
