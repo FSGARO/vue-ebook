@@ -160,6 +160,9 @@ export const storeHomeMixin = {
       'setOffsetY',
       'setHotSearchOffsetY',
       'setFlapCardVisible'
-    ])
+    ]),
+    showBookDetail (book) {
+      console.log('加载中')
+    }
   }
 }

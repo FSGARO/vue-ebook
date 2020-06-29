@@ -2,7 +2,8 @@
 <template>
   <div class="flap-card-wrapper" v-show="this.flapCardVisible">
     <!--白色背景-->
-    <div :class="{'animation':runFlapCardAnimation}" class="flap-card-bg">
+    <div :class="{'animation':runFlapCardAnimation}" class="flap-card-bg"
+         v-show="runFlapCardAnimation">
       <!--圆-->
       <div :key="index" :style="{zIndex:item.zIndex}"
            class="flap-card"
@@ -24,6 +25,27 @@
         <div :class="{'animation':runPointAnimation}" :key="item" class="point" v-for="item in pointList"></div>
       </div>
     </div>
+    <!--推荐书籍-->
+    <div :class="{'animation': runBookCardAnimation}" class="book-card"
+         v-show="runBookCardAnimation">
+      <div class="book-card-wrapper">
+        <!--书籍图片-->
+        <div class="img-wrapper">
+          <img :src="data ? data.cover : ''" class="img">
+        </div>
+        <!--内容-->
+        <div class="content-wrapper">
+          <!--标题 书名-->
+          <div class="content-title">{{data ? data.title : ''}}</div>
+          <!--作者-->
+          <div class="content-author sub-title-medium">{{data ? data.author : ''}}</div>
+          <!--分类-->
+          <div class="content-category">{{categoryText()}}</div>
+        </div>
+        <!--立即阅读 阻止事件冒泡-->
+        <div @click.stop="showBookDetail(data)" class="read-btn">{{$t('home.readNow')}}</div>
+      </div>
+    </div>
     <!--关闭按钮-->
     <div class="close-btn-wrapper">
       <div @click="close" class="icon-close"></div>
@@ -33,10 +55,14 @@
 
 <script>
   import { storeHomeMixin } from '../../utils/mixin'
-  import { flapCardList } from '../../utils/store'
+  import { categoryText, flapCardList } from '../../utils/store'
 
   export default {
     mixins: [storeHomeMixin],
+    /*接收Store传来的书*/
+    props: {
+      data: Object
+    },
     name: 'FlapCard',
     created () {
       /*创建小球*/
@@ -54,6 +80,7 @@
         runFlapCardAnimation: false,
         pointList: null,
         runPointAnimation: false,
+        runBookCardAnimation: false
       }
     },
     methods: {
@@ -67,6 +94,12 @@
         /*如果存在则关闭*/
         if (this.task) {
           clearInterval(this.task)
+        }
+        if (this.timeout) {
+          clearTimeout(this.timeout)
+        }
+        if (this.timeout2) {
+          clearTimeout(this.timeout2)
         }
         this.reset()/*重置卡片*/
       },
@@ -102,6 +135,9 @@
           this.rotate(index, 'front')
           this.rotate(index, 'back')
         })
+        this.runFlapCardAnimation = false
+        this.runBookCardAnimation = false
+        this.runPointAnimation = false
       },
       /*卡片旋转*/
       flapCardRotate () {
@@ -173,10 +209,6 @@
         this.runPointAnimation = true
         setTimeout(() => {
           this.runPointAnimation = false
-          /*this.stopAnimation()*/
-          if (this.task) {
-            clearInterval(this.task)
-          }
         }, 750)
       },
       /*开始卡片动画*/
@@ -185,19 +217,28 @@
         this.task = setInterval(() => {
           this.flapCardRotate()/*旋转*/
         }, this.intervalTime)
-        setTimeout(() => {
-          this.runFlapCardAnimation = false
-        }, 2500)
       },
       /*弹出卡片*/
       runAnimation () {
         this.runFlapCardAnimation = true
         /*弹出后卡片翻转*/
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.startFlapCardAnimation()
           this.startPointAnimation()
-        })
-      }
+        }, 300)
+        this.timeout2 = setTimeout(() => {
+          this.runFlapCardAnimation = false
+          this.runBookCardAnimation = true
+        }, 2500)
+      },
+      /*获取分类*/
+      categoryText () {
+        if (this.data) {
+          categoryText(this.data.category, this)
+        } else {
+          return null
+        }
+      },
     },
     watch: {
       flapCardVisible (v) {
@@ -205,13 +246,12 @@
           this.runAnimation()
         }
       }
-    }
+    },
   }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../assets/styles/global";
-  @import "../../assets/styles/flapCard";
 
   .flap-card-wrapper {
     z-index: 1000;
@@ -238,7 +278,6 @@
                 infinite 无限循环
                 */
       }
-
       /*css3属性*/
       @keyframes flap-card-move {
         /*刚开始*/
@@ -310,6 +349,89 @@
               }
             }
           }
+        }
+      }
+    }
+
+    .book-card {
+      position: relative;
+      width: 65%;
+      max-width: px2rem(400); /*最大高度*/
+      box-sizing: border-box;
+      border-radius: px2rem(15);
+      background: white;
+
+      &.animation {
+        animation: scale .3s ease-in both;
+        /*逐步放大*/
+        @keyframes scale {
+          0% {
+            transform: scale(0);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+      }
+
+      .book-card-wrapper {
+        width: 100%;
+        height: 100%;
+        margin-bottom: px2rem(30);
+        @include columnTop;
+
+        .img-wrapper {
+          width: 100%;
+          margin-top: px2rem(20);
+          @include center;
+
+          .img {
+            width: px2rem(90);
+            height: px2rem(130);
+          }
+        }
+
+        .content-wrapper {
+          padding: 0 px2rem(20);
+          margin-top: px2rem(20);
+
+          .content-title {
+            color: #333;
+            font-weight: bold;
+            font-size: px2rem(18);
+            line-height: px2rem(20);
+            max-height: px2rem(40);
+            text-align: center;
+            @include ellipsis2(2)
+          }
+
+          .content-author {
+            margin-top: px2rem(10);
+            text-align: center;
+          }
+
+          .content-category {
+            color: #999;
+            font-size: px2rem(14);
+            margin-top: px2rem(20); /*  */
+            text-align: center;
+          }
+        }
+
+        .read-btn {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          z-index: 1100;
+          width: 100%;
+          border-radius: 0 0 px2rem(15) px2rem(15);
+          padding: px2rem(15) 0;
+          text-align: center;
+          color: white;
+          font-size: px2rem(14);
+          background: $color-blue;
         }
       }
     }

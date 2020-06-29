@@ -1,7 +1,7 @@
 <template>
   <div class="store-home">
     <SearchBar></SearchBar>
-    <flap-card></flap-card>
+    <flap-card :data="random"></flap-card>
     <scroll :top='scrollTop' @onScroll="onScroll" ref="scroll">
       <div>
         <div>111111111111111111111111111111</div>
@@ -97,15 +97,16 @@
     },
     data () {
       return {
-        scrollTop: 84
+        scrollTop: 84,
+        random: null
       }
     },
     mounted () {
       home().then(response => {
-        console.log(response)
-        if (response && response === 200) {
+        if (response && response.status === 200) {
           const data = response.data
-          console.log(data)
+          const randomIndex = Math.floor(Math.random() * data.random.length)/*向下取整,随机拿书*/
+          this.random = data.random[randomIndex]
         }
       })
     }
