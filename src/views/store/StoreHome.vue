@@ -74,6 +74,7 @@
   import Scroll from '../../components/common/Scroll'
   import { storeHomeMixin } from '../../utils/mixin'
   import FlapCard from '../../components/home/FlapCard'
+  import { home } from '../../api/store'
 
   export default {
     mixins: [storeHomeMixin],
@@ -99,6 +100,15 @@
         scrollTop: 84
       }
     },
+    mounted () {
+      home().then(response => {
+        console.log(response)
+        if (response && response === 200) {
+          const data = response.data
+          console.log(data)
+        }
+      })
+    }
 
   }
 </script>
