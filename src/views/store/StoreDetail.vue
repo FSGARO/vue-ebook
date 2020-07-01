@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-      <div class="book-detail-content-wrapper">
+    <!--  <div class="book-detail-content-wrapper">
         <div class="book-detail-content-title">{{$t('detail.trial')}}</div>
         <div class="book-detail-content-list-wrapper">
           <div class="loading-text-wrapper" v-if="!this.displayed">
@@ -67,11 +67,11 @@
           </div>
         </div>
         <div id="preview" ref="preview" v-show="this.displayed"></div>
-      </div>
+      </div>-->
     </scroll>
     <div class="bottom-wrapper">
       <div @click.stop.prevent="readBook()" class="bottom-btn">{{$t('detail.read')}}</div>
-      <div @click.stop.prevent="trialListening()" class="bottom-btn">{{$t('detail.listen')}}</div>
+      <!--  <div @click.stop.prevent="trialListening()" class="bottom-btn">{{$t('detail.listen')}}</div>-->
       <div @click.stop.prevent="addOrRemoveShelf()" class="bottom-btn">
         <span class="icon-check" v-if="inBookShelf"></span>
         {{inBookShelf ? $t('detail.isAddedToShelf') : $t('detail.addOrRemoveShelf')}}
@@ -114,6 +114,7 @@
           return []
         }
       },
+
       lang () {
         return this.metadata ? this.metadata.language : '-'
       },
@@ -172,8 +173,8 @@
           path: `/ebook/${this.categoryText}|${this.fileName}`
         })
       },
-      trialListening () {
-      },
+      /*   trialListening () {
+         },*/
       read (item) {
         this.$router.push({
           path: `/ebook/${this.categoryText}|${this.fileName}`
@@ -250,8 +251,9 @@
         }
       },
       back () {
-        this.$router.go(-1)
+        this.$router.go(-1)/*返回*/
       },
+      /*渲染*/
       display (location) {
         if (this.$refs.preview) {
           if (!this.rendition) {
@@ -270,9 +272,9 @@
       },
       onScroll (offsetY) {
         if (offsetY > realPx(42)) {
-          this.$refs.title.showShadow()
+          this.$refs.title.showShadow()/*显示*/
         } else {
-          this.$refs.title.hideShadow()
+          this.$refs.title.hideShadow()/*隐藏*/
         }
       }
     },

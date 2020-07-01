@@ -77,7 +77,7 @@
       getList () {
         list().then(response => {
           this.list = response.data.data/*图书列表*/
-          this.total = response.data.total/*total 465*/
+          this.total = response.data.total/*图书数量*/
           const category = this.$route.query.category/*传入的category*/
           const keyword = this.$route.query.keyword/*传入的keyword 用来做搜索*/
           if (category) {
@@ -98,8 +98,8 @@
       }
     },
     created () {
-      this.getList()/*获取图书列表*/
-      this.titleText = this.$route.query.categoryText
+      this.getList()/*获取所有图书列表*/
+      this.titleText = this.$route.query.categoryText/*分类名*/
     }
   }
 </script>
