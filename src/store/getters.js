@@ -21,5 +21,6 @@ const book = {
   speakingIconBottom: state => state.book.speakingIconBottom,
   hotSearchOffsetY: state => state.store.hotSearchOffsetY,
   flapCardVisible: state => state.store.flapCardVisible,
+  shelfList: state => state.store.shelfList,
 }
 export default book

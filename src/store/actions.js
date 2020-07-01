@@ -65,5 +65,8 @@ const actions = {
   setFlapCardVisible ({ commit }, flapCardVisible) {
     return commit('SET_FLAP_VISIBLE', flapCardVisible)
   },
+  setShelfList ({ commit }, shelfList) {
+    return commit('SET_SHELF_LIST', shelfList)
+  },
 }
 export default actions
