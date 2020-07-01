@@ -1,3 +1,4 @@
+<!--全部分类-->
 <template>
   <div class="category">
     <title-view :btn="$t('home.seeAll')" :label="$t('home.category')" @onClick="showBookList"></title-view>
@@ -5,12 +6,16 @@
       <div :key="index" @click="showBookCategory(item)" class="category-item-wrapper" v-for="(item, index) in data">
         <div class="category-item">
           <div class="content-wrapper">
+            <!--分类名字-->
             <div class="title title-medium">{{categoryText(item.category)}}</div>
+            <!--图书数量-->
             <div class="num sub-title-tiny">{{item.num + ' ' + $t('home.books')}}</div>
           </div>
           <div class="img-wrapper">
             <div class="img-group">
+              <!--图1-->
               <img :src="item.img1" class="img">
+              <!--图2-->
               <img :src="item.img2" class="img2">
             </div>
           </div>
@@ -20,7 +25,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import TitleView from './Title'
   import { categoryText, getCategoryName } from '../../utils/store'
 

@@ -29,7 +29,7 @@
                  class="input"
                  type="text"
                  v-model="searchText"
-          >
+                 @keyup.13.exact="search"><!--只有回车触发-->
         </div>
       </div>
     </div>
@@ -107,6 +107,16 @@
         this.hotSearchVisible = true
         this.$nextTick(() => {
           this.$refs.hotSearch.reset()
+        })
+      },
+      /*搜索*/
+      search () {
+        /*跳转列表页*/
+        this.$router.push({
+          path: '/store/list',/**/
+          query: {
+            keyword: this.searchText
+          }
         })
       },
       /*返回按钮*/

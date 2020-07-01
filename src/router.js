@@ -15,7 +15,7 @@ export default new Router({
       children: [
         {
           path: ':fileName',
-          component: () => import('./components/ebook/EbookReader')
+          component: () => import('./components/ebook/EbookReader.vue')
         }
       ]
     },
@@ -26,8 +26,16 @@ export default new Router({
       children: [
         {
           path: 'home',
-          component: () => import('./views/store/StoreHome')
-        }
+          component: () => import('./views/store/StoreHome.vue')
+        },
+        {
+          path: 'list',
+          component: () => import('./views/store/StoreList.vue')
+        },
+        {
+          path: 'detail',
+          component: () => import('./views/store/StoreDetail.vue')
+        },
       ]
     }
   ]

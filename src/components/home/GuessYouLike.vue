@@ -1,15 +1,21 @@
-<!--猜你喜欢-->
+<!--猜你喜欢 -->
 <template>
   <div class="guess-you-like">
+    <!--换一批-->
     <title-view :btn="$t('home.change')" :label="$t('home.guessYouLike')" @onClick="change"></title-view>
     <div class="guess-you-like-list">
+      <!--三本书-->
       <div :key="index" @click="showBookDetail(item)" class="guess-you-like-item" v-for="(item, index) in showData">
         <div class="img-wrapper">
+          <!--图片-->
           <img :src="item.cover" class="img">
         </div>
         <div class="content-wrapper">
+          <!--书名-->
           <div class="title title-big" ref="title">{{item.title}}</div>
+          <!--作者-->
           <div class="author sub-title" ref="author">{{item.author}}</div>
+          <!--推荐信息-->
           <div class="result third-title" ref="result">{{resultText(item)}}</div>
         </div>
       </div>
@@ -17,9 +23,8 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import TitleView from './Title'
-  import { realPx } from '@/utils/utils'
   import { storeHomeMixin } from '../../utils/mixin'
 
   export default {
@@ -32,19 +37,16 @@
     },
     watch: {
       data (v) {
-        this.total = v.length / 3
+        this.total = v.length / 3 /* */
       }
     },
     computed: {
-      width () {
-        return window.innerWidth - realPx(20) - realPx(60) + 'px'
-      },
       showData () {
         if (this.data) {
           return [
-            this.data[this.index],
-            this.data[this.index + this.total],
-            this.data[this.index + this.total * 2]
+            this.data[this.index],/*1*/
+            this.data[this.index + this.total],/*4*/
+            this.data[this.index + this.total * 2]/*7*/
           ]
         } else {
           return []
@@ -60,7 +62,7 @@
     methods: {
       change () {
         if (this.index + 1 >= this.total) {
-          this.index = 0
+          this.index = 0 /*归零*/
         } else {
           this.index++
         }
@@ -69,27 +71,17 @@
         if (item && item.type && item.result) {
           switch (item.type) {
             case 1:
+              /*同作者*/
               return this.$t('home.sameAuthor').replace('$1', item.result)
+            /*感兴趣也在读*/
             case 2:
               return this.$t('home.sameReader').replace('$1', item.result)
+            /*阅读的人也在读*/
             case 3:
               return this.$t('home.readPercent').replace('$1', item.percent).replace('$2', item.result)
           }
         }
       },
-      resize () {
-        this.$nextTick(() => {
-          this.$refs.title.forEach(item => {
-            item.style.width = this.width
-          })
-          this.$refs.author.forEach(item => {
-            item.style.width = this.width
-          })
-          this.$refs.result.forEach(item => {
-            item.style.width = this.width
-          })
-        })
-      }
     }
   }
 </script>

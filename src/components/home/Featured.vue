@@ -1,15 +1,26 @@
+<!--精选-->
 <template>
   <div class="featured">
-    <title-view :btn="btnText" :label="titleText" v-if="titleVisible && data && data.length > 0"></title-view>
+    <!--小标题-->
+    <title-view :btn="btnText" :label="titleText"
+                @click="showBookList"
+                v-if="titleVisible && data && data.length > 0"></title-view>
+
     <div class="featured-list">
       <div class="featured-item-wrapper">
-        <div :key="index" @click="showBookDetail(item)" class="featured-item" v-for="(item, index) in data">
+        <div :key="index" @click="showBookDetail(item)"
+             class="featured-item" v-for="(item, index) in data">
+          <!--图片-->
           <div class="img-wrapper">
             <img :src="item.cover" class="img">
           </div>
+          <!--内容-->
           <div class="content-wrapper">
+            <!--标题-->
             <div class="title title-small" ref="title">{{item.title}}</div>
+            <!--作者-->
             <div class="author sub-title-tiny" ref="author">{{item.author}}</div>
+            <!--分类-->
             <div class="category third-title-tiny" ref="category">{{categoryText(item.category)}}</div>
           </div>
         </div>
@@ -20,7 +31,6 @@
 
 <script type="text/ecmascript-6">
   import TitleView from './Title'
-  import { realPx } from '@/utils/utils'
   import { categoryText } from '../../utils/store'
   import { storeHomeMixin } from '../../utils/mixin'
 
@@ -42,28 +52,11 @@
         type: String
       }
     },
-    computed: {
-      width () {
-        return window.innerWidth - realPx(20) - realPx(60) + 'px'
-      }
-    },
     methods: {
+      /*分类国际化*/
       categoryText (category) {
         return categoryText(category, this)
       },
-      resize () {
-        this.$nextTick(() => {
-          this.$refs.title.forEach(item => {
-            item.style.width = this.width
-          })
-          this.$refs.author.forEach(item => {
-            item.style.width = this.width
-          })
-          this.$refs.category.forEach(item => {
-            item.style.width = this.width
-          })
-        })
-      }
     }
   }
 </script>

@@ -5,7 +5,7 @@ import store from './store'
 import './assets/styles/icon.css'
 import './assets/styles/global.scss'
 import i18n from '././lang'
-import './mock'
+/*import './mock'*/         /*不支持下载,所以无法渲染电子书*/
 
 Vue.config.productionTip = false
 new Vue({

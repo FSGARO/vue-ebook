@@ -1,13 +1,18 @@
+<!--热门推荐-->
 <template>
   <div class="recommend">
-    <title-view :btn="$t('home.seeAll')" :label="$t('home.recommend')"></title-view>
+    <!--小标题-->
+    <title-view :btn="$t('home.seeAll')" :label="$t('home.recommend')" @click="showBookList"></title-view>
     <div class="recommend-list">
       <div :key="index" @click="showBookDetail(item)" class="recommend-item" v-for="(item, index) in data">
         <div class="img-wrapper">
+          <!--图片-->
           <img :src="item.cover" class="img">
         </div>
         <div class="content-wrapper">
+          <!--书名-->
           <div class="title title-medium" ref="title">{{item.title}}</div>
+          <!--多少人读-->
           <div class="num sub-title" ref="num">{{$t('home.readers').replace('$1', item.readers)}}</div>
         </div>
       </div>
@@ -26,6 +31,12 @@
     },
     props: {
       data: Array
+    },
+    methods: {
+      /*显示图书列表*/
+      showBookList () {
+        this.$router.push('/store/list')
+      }
     }
   }
 </script>

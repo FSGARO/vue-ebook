@@ -1,6 +1,9 @@
+<!--小标题-->
 <template>
   <div class="home-title-wrapper">
+    <!--类别名字-->
     <div class="label">{{label}}</div>
+    <!--按钮名字-->
     <div @click="click" class="btn">{{btn}}</div>
   </div>
 </template>

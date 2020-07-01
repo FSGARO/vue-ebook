@@ -8,5 +8,5 @@ import flatList from './bookFlatList' /*图书列表 查询用*/
 
 Mock.mock(/\/book\/home/, 'get', home)/*book/home*/
 Mock.mock(/\/book\/shelf/, 'get', shelf)
-Mock.mock(/\/book\/list/, 'get', list)
+Mock.mock(/\/book\/list/, 'get', list)/**/
 Mock.mock(/\/book\/flatList/, 'get', flatList)

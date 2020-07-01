@@ -1,13 +1,18 @@
+<!--4个分类-->
 <template>
   <div class="category-book">
+    <!--小标题-->
     <title-view :btn="$t('home.seeAll')" :label="categoryText(data.category)" @onClick="showBookCategory"></title-view>
     <div class="category-book-list">
       <div :key="index" @click="showBookDetail(item)" class="category-book-item" v-for="(item, index) in data.list">
         <div class="img-wrapper">
+          <!--图片-->
           <img :src="item.cover" class="img">
         </div>
         <div class="content-wrapper">
+          <!--书名-->
           <div class="title title-small" ref="title">{{item.title}}</div>
+          <!--作者-->
           <div class="num sub-title-tiny" ref="author">{{item.author}}</div>
         </div>
       </div>
@@ -15,7 +20,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import TitleView from './Title'
   import { categoryText, getCategoryName } from '../../utils/store'
   import { storeHomeMixin } from '../../utils/mixin'
@@ -29,6 +34,7 @@
       data: Object
     },
     methods: {
+      /*路由跳转*/
       showBookCategory () {
         this.$router.push({
           path: '/store/list',
@@ -38,6 +44,7 @@
           }
         })
       },
+      /*分类名称*/
       categoryText (category) {
         return categoryText(category, this)
       }

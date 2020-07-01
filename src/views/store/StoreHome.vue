@@ -76,7 +76,6 @@
       home().then(response => {
         if (response && response.status === 200) {
           const data = response.data
-          console.log(data)
           const randomIndex = Math.floor(Math.random() * data.random.length)/*向下取整,随机拿书*/
           this.random = data.random[randomIndex]/*书*/
           this.banner = data.banner/*图*/

@@ -33,7 +33,7 @@
     name: 'EbookTitle',
     methods: {
       back: function () {
-        console.log('back')
+        this.$router.go(-1)/*返回*/
       }
     }
   }

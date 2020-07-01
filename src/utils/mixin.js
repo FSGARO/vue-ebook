@@ -1,6 +1,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { addCss, getReadTimeByMinute, removeAllCss, themeList } from './book'
 import { getBookmark, saveLocation } from './localStorage'
+import { gotoBookDetail } from './store'
 /*mapActions是混入methods中*/
 export const ebookMixin = {
   computed: {
@@ -107,7 +108,6 @@ export const ebookMixin = {
           this.setIsBookmark(false)
         }
         /*分页信息*/
-
         /*        if (this.pagelist) {
                   const totalPage = this.pagelist.length
                   const currentPage = currentLocation.start.location
@@ -161,8 +161,13 @@ export const storeHomeMixin = {
       'setHotSearchOffsetY',
       'setFlapCardVisible'
     ]),
+    /*显示图书信息*/
     showBookDetail (book) {
-      console.log('加载中')
+      gotoBookDetail(this, book)
+    },
+    /*显示图书列表*/
+    showBookList () {
+      this.$router.push('/store/list')
     }
   }
 }
