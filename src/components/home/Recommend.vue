@@ -7,7 +7,7 @@
       <div :key="index" @click="showBookDetail(item)" class="recommend-item" v-for="(item, index) in data">
         <div class="img-wrapper">
           <!--图片-->
-          <img :src="item.cover" class="img">
+          <img :src="item.cover" class="img" v-lazy="item.cover">
         </div>
         <div class="content-wrapper">
           <!--书名-->

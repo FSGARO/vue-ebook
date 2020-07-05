@@ -1,7 +1,8 @@
 import { mapActions, mapGetters } from 'vuex'
 import { addCss, getReadTimeByMinute, removeAllCss, themeList } from './book'
-import { getBookmark, saveLocation } from './localStorage'
-import { gotoBookDetail } from './store'
+import { getBookmark, getBookShelf, saveBookShelf, saveLocation } from './localStorage'
+import { appendAddToShelf, gotoBookDetail } from './store'
+import { shelf } from '../api/store'
 /*mapActions是混入methods中*/
 export const ebookMixin = {
   computed: {
@@ -107,18 +108,6 @@ export const ebookMixin = {
         } else {
           this.setIsBookmark(false)
         }
-        /*分页信息*/
-        /*        if (this.pagelist) {
-                  const totalPage = this.pagelist.length
-                  const currentPage = currentLocation.start.location
-                  if (currentPage && currentPage > 0) {
-                    this.setPaginate(currentPage + ' / ' + totalPage)
-                  } else {
-                    this.setPaginate('')
-                  }
-                } else {
-                  this.setPaginate('')
-                }*/
       }
     },
     display (target, cb) {
@@ -175,7 +164,10 @@ export const storeHomeMixin = {
 export const storeShelfMixin = {
   computed: {
     ...mapGetters([
+      'isEditMode',
       'shelfList',
+      'shelfSelected',
+      'shelfTitleVisible',
       'offsetY',
       'shelfCategory',
       'currentType'
@@ -183,48 +175,31 @@ export const storeShelfMixin = {
   },
   methods: {
     ...mapActions([
+      'setIsEditMode',
       'setShelfList',
+      'setShelfSelected',
+      'setShelfTitleVisible',
       'setOffsetY',
       'setShelfCategory',
       'setCurrentType'
     ]),
+    /*显示图书详情*/
     showBookDetail (book) {
       gotoBookDetail(this, book)
     },
-    getCategoryList (title) {
-      this.getShelfList().then(() => {
-        const categoryList = this.shelfList.filter(book => book.type === 2 && book.title === title)[0]
-        this.setShelfCategory(categoryList)
-      })
-    },
-    /* getShelfList() {
-       let shelfList = getBookShelf()
-       if (!shelfList) {
-         shelf().then(response => {
-           if (response.status === 200 && response.data && response.data.bookList) {
-             shelfList = appendAddToShelf(response.data.bookList)
-             saveBookShelf(shelfList)
-             return this.setShelfList(shelfList)
-           }
-         })
-       } else {
-         return this.setShelfList(shelfList)
-       }
-     },*/
-    moveOutOfGroup (f) {
-      this.setShelfList(this.shelfList.map(book => {
-        if (book.type === 2 && book.itemList) {
-          book.itemList = book.itemList.filter(subBook => !subBook.selected)
-        }
-        return book
-      })).then(() => {
-        const list = computeId(appendAddToShelf([].concat(
-          removeAddFromShelf(this.shelfList), ...this.shelfSelected)))
-        this.setShelfList(list).then(() => {
-          this.simpleToast(this.$t('shelf.moveBookOutSuccess'))
-          if (f) f()
+    getShelfList () {
+      let shelfList = getBookShelf()
+      if (!shelfList) {
+        shelf().then(response => {
+          if (response.status === 200 && response.data && response.data.bookList) {
+            shelfList = appendAddToShelf(response.data.bookList)
+            saveBookShelf(shelfList)
+            return this.setShelfList(shelfList)
+          }
         })
-      })
-    }
+      } else {
+        return this.setShelfList(shelfList)
+      }
+    },
   }
 }

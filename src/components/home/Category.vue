@@ -14,9 +14,9 @@
           <div class="img-wrapper">
             <div class="img-group">
               <!--图1-->
-              <img :src="item.img1" class="img">
+              <img :src="item.img1" class="img" v-lazy="item.img1">
               <!--图2-->
-              <img :src="item.img2" class="img2">
+              <img :src="item.img2" class="img2" v-lazy="item.img2">
             </div>
           </div>
         </div>

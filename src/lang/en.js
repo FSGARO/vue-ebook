@@ -112,15 +112,6 @@ const messages = {
     addOrRemoveShelf: 'Add to Book Shelf',
     isAddedToShelf: 'Added to BookShelf'
   },
-  speak: {
-    voice: 'Voice Reading',
-    read: 'Read Originial',
-    settings: 'Settings',
-    timing: 'Timing',
-    current: 'Current Section',
-    requestFailed: 'Request failed!',
-    apply: 'The core technology of semantic analysis is provided by iFLY TEK'
-  },
   book: {
     pulldownAddMark: 'Pull down to add bookmark',
     releaseAddMark: 'Release to add bookmark',

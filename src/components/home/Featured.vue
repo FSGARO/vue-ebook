@@ -12,7 +12,7 @@
              class="featured-item" v-for="(item, index) in data">
           <!--图片-->
           <div class="img-wrapper">
-            <img :src="item.cover" class="img">
+            <img :src="item.cover" class="img" v-lazy="item.cover">
           </div>
           <!--内容-->
           <div class="content-wrapper">

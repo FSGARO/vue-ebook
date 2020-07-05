@@ -6,15 +6,19 @@
         <!-- 返回-->
         <span class="icon-back" @click="back"></span>
       </div>
+      <div class="img-wrapper">
+        <img src="http://192.168.1.104:8081/logo.png">
+      </div>
+
       <!--右-->
       <div class="right">
         <!-- 书架-->
         <div class="icon-wrapper">
-          <span class="icon-shelf "></span>
+          <span @click="gotoBookShelf" class="icon-shelf "></span>
         </div>
         <!--购物车图标-->
         <div class="icon-wrapper">
-          <span class="icon-cart "></span>
+          <span @click="gotoBookStore" class="icon-cart "></span>
         </div>
         <!--更多-->
         <div class="icon-wrapper">
@@ -32,9 +36,15 @@
     mixins: [ebookMixin], /*利用vuex的mixins精简代码*/
     name: 'EbookTitle',
     methods: {
-      back: function () {
+      back () {
         this.$router.go(-1)/*返回*/
-      }
+      },
+      gotoBookShelf () {
+        this.$router.push('/store/shelf')
+      },
+      gotoBookStore () {
+        this.$router.push('/store/home')
+      },
     }
   }
 </script>
@@ -52,24 +62,43 @@
     background: white;
     box-shadow: 0 px2rem(8) px2rem(8) rgba(0, 0, 0, .15);
     font-size: px2rem(20);
+
     .left {
-      flex: 0 0 px2rem(60);
+      flex: 0 0 px2rem(40);
       @include left;
       margin-left: px2rem(15);
     }
+
+    .img-wrapper {
+      @include left;
+    }
+
+    img {
+      width: px2rem(50);
+    }
+
     .right {
       flex: 1;
       display: flex;
       justify-content: flex-end;
+
       .icon-wrapper {
         flex: 0 0 px2rem(40);
         @include center;
+
         .icon-shelf {
           font-size: px2rem(22);
         }
+
         .icon-cart {
           font-size: px2rem(22);
         }
+      }
+
+      .img-wrapper {
+        flex: 1;
+        @include center;
+
       }
     }
   }

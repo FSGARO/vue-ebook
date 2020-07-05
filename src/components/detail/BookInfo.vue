@@ -4,7 +4,7 @@
     <!--封面-->
     <div class="cover-title-left-wrapper">
       <!--图片-->
-      <img :src="cover" class="cover-img">
+      <img :src="cover" class="cover-img" v-lazy="cover">
     </div>
     <div class="cover-title-right-wrapper">
       <!--标题-->

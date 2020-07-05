@@ -1,4 +1,6 @@
+import { getBookShelf, saveBookShelf } from './localStorage'
 /*卡片半圆列表*/
+
 export const flapCardList = [
   {
     r: 255,
@@ -57,6 +59,7 @@ export const flapCardList = [
   },
 
 ]
+
 /*通过id查找分类*/
 export function getCategoryName (id) {
   switch (id) {
@@ -105,6 +108,50 @@ export function getCategoryName (id) {
     case 22:
       return 'Statistics'
   }
+}
+
+/*书架添加图标*/
+export function appendAddToShelf (list) {
+  list.push({
+    id: -1,
+    type: 3
+  })
+  return list
+}
+
+/*书架删除图标*/
+export function removeAddFromShelf (list) {
+  return list.filter(item => item.type !== 3)
+}
+
+/*添加到书架*/
+export function addToShelf (book) {
+  let shelfList = getBookShelf()/*获取书架数组*/
+  shelfList = removeAddFromShelf(shelfList)/*去掉图标*/
+  book.type = 1/*设置type*/
+  shelfList.push(book)/*添加*/
+  shelfList = computeId(shelfList)/*处理id*/
+  shelfList = appendAddToShelf(shelfList)/*添加图标*/
+  saveBookShelf(shelfList)/*保存书架*/
+}
+
+/*处理id*/
+export function computeId (list) {
+  return list.map((book, index) => {
+    if (book.type === 1) {
+      book.id = index + 1
+    }
+    return book
+  })
+}
+
+export function removeFromBookShelf (book) {
+  return getBookShelf().filter(item => {
+    if (item.itemList) {
+      item.itemList = removeAddFromShelf(item.itemList)
+    }
+    return item.fileName !== book.fileName
+  })
 }
 
 /*分类的显示 国际化*/
@@ -157,17 +204,11 @@ export function categoryText (category, vue) {
   }
 }
 
-/*export function showBookDetail(vue, book) {
-
+export function gotoStoreHome (vue) {
   vue.$router.push({
-    path: '/store/detail',
-
-    query: {
-      fileName: book.fileName,
-      category: book.categoryText
-    }
+    path: '/store/home',/*路径*/
   })
-}*/
+}
 
 /*显示书籍信息*/
 export function gotoBookDetail (vue, book) {

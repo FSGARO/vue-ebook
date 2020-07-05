@@ -28,13 +28,6 @@ export function saveFontSize (fileName, fontSize) {
   setBookObject(fileName, 'fontSize', fontSize)
 }
 
-export function getHome () {
-  return getLocalStorage('home')
-}
-
-export function saveHome (home) {
-  return setLocalStorage('home', home, 1800)
-}
 /*获取语言*/
 export function getLocale () {
   return getLocalStorage('locale')
@@ -66,38 +59,6 @@ export function getReadTime (fileName) {
 export function saveReadTime (fileName, theme) {
   setBookObject(fileName, 'time', theme)
 }
-
-export function getProgress (fileName) {
-  return getBookObject(fileName, 'progress')
-}
-
-export function saveProgress (fileName, progress) {
-  setBookObject(fileName, 'progress', progress)
-}
-
-export function getNavigation (fileName) {
-  return getBookObject(fileName, 'navigation')
-}
-
-export function saveNavigation (fileName, navigation) {
-  setBookObject(fileName, 'navigation', navigation)
-}
-
-export function getMetadata (fileName) {
-  return getBookObject(fileName, 'metadata')
-}
-
-export function saveMetadata (fileName, metadata) {
-  setBookObject(fileName, 'metadata', metadata)
-}
-
-export function getCover (fileName) {
-  return getBookObject(fileName, 'cover')
-}
-
-export function saveCover (fileName, cover) {
-  setBookObject(fileName, 'cover', cover)
-}
 /*获取字体*/
 export function getFontFamily (fileName) {
   return getBookObject(fileName, 'fontFamily')
@@ -114,6 +75,7 @@ export function getTheme (fileName) {
 export function saveTheme (fileName, theme) {
   setBookObject(fileName, 'theme', theme)
 }
+
 /*书*/
 export function getBookObject (fileName, key) {
   if (getLocalStorage(`${fileName}-info`)) {
@@ -122,6 +84,17 @@ export function getBookObject (fileName, key) {
     return null
   }
 }
+
+/*保存书架*/
+export function saveBookShelf (shelf) {
+  return setLocalStorage('shelf', shelf)
+}
+
+/*获取书架*/
+export function getBookShelf () {
+  return getLocalStorage('shelf')
+}
+
 /*书*/
 export function setBookObject (fileName, key, value) {
   let book = {}
@@ -131,3 +104,10 @@ export function setBookObject (fileName, key, value) {
   book[key] = value
   setLocalStorage(`${fileName}-info`, book)
 }
+
+export function getLocalForage (key, cb) {
+  localForage.getItem(key, (err, value) => {
+    cb(err, value)
+  })
+}
+

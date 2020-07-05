@@ -22,7 +22,7 @@ export default new Router({
     {
       path: '/store',
       component: () => import('./views/store/index'),
-      redirect: '/store/shelf',
+      redirect: '/store/hello',
       children: [
         {
           path: 'home',
@@ -39,6 +39,10 @@ export default new Router({
         {
           path: 'shelf',
           component: () => import('./views/store/StoreShelf')
+        },
+        {
+          path: 'hello',
+          component: () => import('./views/Hello')
         }
       ]
     }

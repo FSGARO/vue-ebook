@@ -43,7 +43,7 @@
           <div class="content-category">{{categoryText()}}</div>
         </div>
         <!--立即阅读 阻止事件冒泡-->
-        <div @click.stop="showBookDetail(data)" class="read-btn">{{$t('home.readNow')}}</div>
+        <div @click.stop="showBookDetails(data)" class="read-btn">{{$t('home.readNow')}}</div>
       </div>
     </div>
     <!--关闭按钮-->
@@ -55,7 +55,7 @@
 
 <script>
   import { storeHomeMixin } from '../../utils/mixin'
-  import { categoryText, flapCardList } from '../../utils/store'
+  import { categoryText, flapCardList, gotoBookDetail } from '../../utils/store'
 
   export default {
     mixins: [storeHomeMixin],
@@ -84,6 +84,11 @@
       }
     },
     methods: {
+      showBookDetails (book) {
+        this.stopAnimation()
+        this.setFlapCardVisible(false)
+        gotoBookDetail(this, book)
+      },
       /*关闭*/
       close () {
         this.stopAnimation()

@@ -275,25 +275,22 @@
             this.navigation.forEach(nav => {
               nav.pagelist = []/*默认为空*/
             })
-            locations.forEach(item => {
-              const loc = item.match(/\[(.*)\]!/)[1]
-              this.navigation.forEach(nav => {
-                if (nav.href) {
-                  const href = nav.href.match(/^(.*)\.html$/)[1]
-                  if (href === loc) {
-                    nav.pagelist.push(item)
-                  }
+            locations.forEach(location => {
+              const loc = location.match(/\[(.*)\]!/)[1]
+              this.navigation.forEach(item => {
+                if (item.idhref && item.idhref.indexOf(loc) >= 0) {
+                  item.pagelist.push(location)
                 }
               })
               let currentPage = 1
-              this.navigation.forEach((nav, index) => {
+              this.navigation.forEach((item, index) => {
                 /*第一页*/
                 if (index === 0) {
-                  nav.page = 1
+                  item.page = 1
                 } else {
-                  nav.page = currentPage
+                  item.page = currentPage
                 }
-                currentPage += nav.pagelist.length + 1
+                currentPage += item.pagelist.length + 1
               })
             })
             /*保存分页*/

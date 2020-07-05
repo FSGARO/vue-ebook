@@ -59,19 +59,9 @@
           </div>
         </div>
       </div>
-    <!--  <div class="book-detail-content-wrapper">
-        <div class="book-detail-content-title">{{$t('detail.trial')}}</div>
-        <div class="book-detail-content-list-wrapper">
-          <div class="loading-text-wrapper" v-if="!this.displayed">
-            <span class="loading-text">{{$t('detail.loading')}}</span>
-          </div>
-        </div>
-        <div id="preview" ref="preview" v-show="this.displayed"></div>
-      </div>-->
     </scroll>
     <div class="bottom-wrapper">
       <div @click.stop.prevent="readBook()" class="bottom-btn">{{$t('detail.read')}}</div>
-      <!--  <div @click.stop.prevent="trialListening()" class="bottom-btn">{{$t('detail.listen')}}</div>-->
       <div @click.stop.prevent="addOrRemoveShelf()" class="bottom-btn">
         <span class="icon-check" v-if="inBookShelf"></span>
         {{inBookShelf ? $t('detail.isAddedToShelf') : $t('detail.addOrRemoveShelf')}}
@@ -88,11 +78,15 @@
   import Toast from '../../components/common/Toast'
   import { detail } from '../../api/store'
   import { px2rem, realPx } from '../../utils/utils'
+  import { addToShelf, removeFromBookShelf } from '../../utils/store'
+  import { storeShelfMixin } from '../../utils/mixin'
+  import { getBookShelf, saveBookShelf } from '../../utils/localStorage'
   import Epub from 'epubjs'
 
   global.ePub = Epub
 
   export default {
+    mixins: [storeShelfMixin],
     components: {
       DetailTitle,
       Scroll,
@@ -132,10 +126,10 @@
         return this.metadata ? this.metadata.creator : ''
       },
       inBookShelf () {
-        if (this.bookItem && this.bookShelf) {
+        if (this.bookItem && this.shelfList) {
           const flatShelf = (function flatten (arr) {
             return [].concat(...arr.map(v => v.itemList ? [v, ...flatten(v.itemList)] : v))
-          })(this.bookShelf).filter(item => item.type === 1)
+          })(this.shelfList).filter(item => item.type === 1)
           const book = flatShelf.filter(item => item.fileName === this.bookItem.fileName)
           return book && book.length > 0
         } else {
@@ -162,19 +156,48 @@
       }
     },
     methods: {
+      /*添加到书架*/
       addOrRemoveShelf () {
+        if (this.inBookShelf) {
+          this.setShelfList(removeFromBookShelf(this.bookItem)).then(() => {
+            saveBookShelf(this.shelfList)
+          })
+        } else {
+          addToShelf(this.bookItem)
+          this.setShelfList(getBookShelf())
+        }
       },
+      /*显示信息*/
       showToast (text) {
         this.toastText = text
         this.$refs.toast.show()
       },
+      /*阅读*/
       readBook () {
         this.$router.push({
-          path: `/ebook/${this.categoryText}|${this.fileName}`
+          path: `/ebook/${this.bookItem.categoryText}|${this.fileName}`
         })
       },
-      /*   trialListening () {
-         },*/
+      trialListening () {
+        getLocalForage(this.bookItem.fileName, (err, blob) => {
+          if (!err && blob && blob instanceof Blob) {
+            this.$router.push({
+              path: '/store/speaking',
+              query: {
+                fileName: this.bookItem.fileName
+              }
+            })
+          } else {
+            this.$router.push({
+              path: '/store/speaking',
+              query: {
+                fileName: this.bookItem.fileName,
+                opf: this.opf
+              }
+            })
+          }
+        })
+      },
       read (item) {
         this.$router.push({
           path: `/ebook/${this.categoryText}|${this.fileName}`
@@ -230,19 +253,17 @@
         this.categoryText = this.$route.query.category
         if (this.fileName) {
           detail({
-            fileName: this.fileName/*传入fileName获取图书信息*/
+            fileName: this.fileName
           }).then(response => {
-            if (response.data.status === 200 && response.data) {
+            if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
               const data = response.data.data
               this.bookItem = data
               this.cover = this.bookItem.cover
               let rootFile = data.rootFile
-              /*去掉斜杠*/
               if (rootFile.startsWith('/')) {
                 rootFile = rootFile.substring(1, rootFile.length)
               }
               this.opf = `${process.env.VUE_APP_EPUB_OPF_URL}/${this.fileName}/${rootFile}`
-              /*解析电子书*/
               this.parseBook(this.opf)
             } else {
               this.showToast(response.data.msg)
@@ -250,8 +271,9 @@
           })
         }
       },
+      /*返回*/
       back () {
-        this.$router.go(-1)/*返回*/
+        this.$router.go(-1)
       },
       /*渲染*/
       display (location) {
@@ -272,14 +294,17 @@
       },
       onScroll (offsetY) {
         if (offsetY > realPx(42)) {
-          this.$refs.title.showShadow()/*显示*/
+          this.$refs.title.showShadow()
         } else {
-          this.$refs.title.hideShadow()/*隐藏*/
+          this.$refs.title.hideShadow()
         }
       }
     },
     mounted () {
       this.init()
+      if (!this.shelfList || this.shelfList.length === 0) {
+        this.getShelfList()
+      }
     }
   }
 </script>
