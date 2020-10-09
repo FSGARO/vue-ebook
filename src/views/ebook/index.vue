@@ -57,7 +57,6 @@
         let redeTime = getReadTime(this.fileName)
         if (!redeTime) {
           redeTime = 0
-
         }
         this.task = setInterval(() => {
           redeTime++

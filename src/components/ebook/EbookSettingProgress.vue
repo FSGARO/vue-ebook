@@ -55,7 +55,7 @@
       onProgressInput (progress) {
         this.setProgress(progress).then(() => {
           this.updateProgressBg() /*拖动中百分比一起变化*/
-          /*this.displayProgress()*/      /*内容*/
+          /*this.displayProgress() */     /*内容*/
         })
       },
       /*展示进度在的页面*/

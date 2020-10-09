@@ -60,6 +60,7 @@
         </div>
       </div>
     </scroll>
+    <!--按钮-->
     <div class="bottom-wrapper">
       <div @click.stop.prevent="readBook()" class="bottom-btn">{{$t('detail.read')}}</div>
       <div @click.stop.prevent="addOrRemoveShelf()" class="bottom-btn">
@@ -94,9 +95,10 @@
       Toast
     },
     computed: {
+      /*简介*/
       desc () {
         if (this.description) {
-          return this.description.substring(0, 100)
+          return this.description.substring(0, 100)/*前100*/
         } else {
           return ''
         }
@@ -115,6 +117,7 @@
       isbn () {
         return this.metadata ? this.metadata.identifier : '-'
       },
+      /*出版*/
       publisher () {
         return this.metadata ? this.metadata.publisher : '-'
       },
@@ -125,6 +128,7 @@
       author () {
         return this.metadata ? this.metadata.creator : ''
       },
+
       inBookShelf () {
         if (this.bookItem && this.shelfList) {
           const flatShelf = (function flatten (arr) {
@@ -137,22 +141,22 @@
         }
       }
     },
+
     data () {
       return {
         bookItem: null,
-        book: null,
-        metadata: null,
+        book: null,/*书*/
+        metadata: null,/*图书信息*/
         trialRead: null,
-        cover: null,
+        cover: null,/*图片*/
         navigation: null,
         displayed: false,
-        audio: null,
         randomLocation: null,
         description: null,
-        toastText: '',
-        trialText: null,
-        categoryText: null,
-        opf: null
+        toastText: '',/*tost内容*/
+        trialText: null,/**/
+        categoryText: null,/*分类*/
+        opf: null,
       }
     },
     methods: {
@@ -178,31 +182,14 @@
           path: `/ebook/${this.bookItem.categoryText}|${this.fileName}`
         })
       },
-      trialListening () {
-        getLocalForage(this.bookItem.fileName, (err, blob) => {
-          if (!err && blob && blob instanceof Blob) {
-            this.$router.push({
-              path: '/store/speaking',
-              query: {
-                fileName: this.bookItem.fileName
-              }
-            })
-          } else {
-            this.$router.push({
-              path: '/store/speaking',
-              query: {
-                fileName: this.bookItem.fileName,
-                opf: this.opf
-              }
-            })
-          }
-        })
-      },
+
+      /*阅读*/
       read (item) {
         this.$router.push({
           path: `/ebook/${this.categoryText}|${this.fileName}`
         })
       },
+
       itemStyle (item) {
         return {
           marginLeft: (item.deep - 1) * px2rem(20) + 'rem'
@@ -218,10 +205,6 @@
           }
         })
         return arr
-      },
-      downloadBook () {
-        const opf = `${process.env.VUE_APP_EPUB_URL}/${this.bookItem.categoryText}/${this.bookItem.fileName}/OEBPS/package.opf`
-        this.parseBook(opf)
       },
       /*解析电子书*/
       parseBook (url) {
@@ -241,7 +224,7 @@
                 this.displayed = true
                 const reg = new RegExp('<.+?>', 'g')
                 const text = section.output.replace(reg, '').replace(/\s\s/g, '')
-                this.description = text
+                this.description = text /*简介*/
               })
             }
           }
@@ -257,11 +240,11 @@
           }).then(response => {
             if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
               const data = response.data.data
-              this.bookItem = data
+              this.bookItem = data/*书*/
               this.cover = this.bookItem.cover
-              let rootFile = data.rootFile
+              let rootFile = data.rootFile/*opf位置*/
               if (rootFile.startsWith('/')) {
-                rootFile = rootFile.substring(1, rootFile.length)
+                rootFile = rootFile.substring(1, rootFile.length)/*去掉/*/
               }
               this.opf = `${process.env.VUE_APP_EPUB_OPF_URL}/${this.fileName}/${rootFile}`
               this.parseBook(this.opf)
@@ -280,7 +263,7 @@
         if (this.$refs.preview) {
           if (!this.rendition) {
             this.rendition = this.book.renderTo('preview', {
-              width: window.innerWidth > 640 ? 640 : window.innerWidth,
+              width: window.innerWidth > 500 ? 500 : window.innerWidth,
               height: window.innerHeight,
               method: 'default'
             })

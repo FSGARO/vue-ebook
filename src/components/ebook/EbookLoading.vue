@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import { px2rem } from '@/utils/utils'
 
   export default {

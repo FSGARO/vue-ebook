@@ -22,7 +22,7 @@
   import { getBookmark, saveBookmark } from '../../utils/localStorage'
 
   const BLUE = '#346cbc'
-  const WHITE = '#ffb400'/*-------------------------------------------------------------*/
+  const WHITE = '#ffb400'
   export default {
     mixins: [ebookMixin],
     components: {
@@ -152,7 +152,7 @@
           .replace(/\)$/, '')
         const cfirange = `${cfibase}!,${cfistart},${cfiend})`
         this.currentBook.getRange(cfirange).then(range => {
-          const text = range.toString().replace(/\s\s/g, '')
+          const text = range.toString().replace(/\s\s/g, '')/*文本*/
           this.bookmark.push({
             cfi: currentLocation.start.cfi,
             text: text

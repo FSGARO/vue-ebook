@@ -95,11 +95,12 @@ export const ebookMixin = {
       if (currentLocation && currentLocation.start) {
         const startCfi = currentLocation.start.cfi
         const progress = this.currentBook.locations.percentageFromCfi(startCfi)
-        this.setProgress(Math.floor(progress * 100))
+        this.setProgress(Math.floor(progress * 100))/*向下取整*/
         this.setSection(currentLocation.start.index)
         saveLocation(this.fileName, startCfi) /*保存位置*/
         const bookmask = getBookmark(this.fileName)
         if (bookmask) {
+          /**/
           if (bookmask.some(item => item.cfi === startCfi)) {
             this.setIsBookmark(true)
           } else {
