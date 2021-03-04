@@ -15,7 +15,6 @@
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../assets/styles/global";
-
   .ebook-header {
     position: absolute;
     top: 0;
